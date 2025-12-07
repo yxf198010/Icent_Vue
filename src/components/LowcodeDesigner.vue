@@ -1,6 +1,6 @@
 <!-- src/components/LowcodeDesigner.vue -->
 <template>
-  <div class="lowcode-designer">
+  <div class="lowcode_designer">
     <!-- 头部区域 -->
     <header class="designer-header">
       <div class="header-content">
@@ -366,7 +366,7 @@ defineExpose({
 
 <style scoped>
 /* 设计器整体布局 */
-.lowcode-designer {
+.lowcode_designer {
   display: flex;
   flex-direction: column;
   width: 100%;

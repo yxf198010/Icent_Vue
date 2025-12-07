@@ -7,12 +7,12 @@ const routes = [
   // 根路由重定向到低代码设计器主路径
   {
     path: '/',
-    redirect: '/lowcode-designer'
+    redirect: '/lowcode_designer'
   },
   // 低代码设计器首页（核心路径）
   {
-    path: '/lowcode-designer',
-    name: 'lowcode-designer-home',
+    path: '/lowcode_designer',
+    name: 'lowcode_designer-home',
     component: FormDesignerHome,
     meta: {
       title: '工业低代码设计器', // 页面标题，可在路由守卫中使用
@@ -21,8 +21,8 @@ const routes = [
   },
   // 表单编辑页（带动态 ID 参数）
   {
-    path: '/lowcode-designer/form-edit/:id',
-    name: 'lowcode-designer-edit',
+    path: '/lowcode_designer/form-edit/:id',
+    name: 'lowcode_designer-edit',
     // 懒加载组件，优化首屏加载速度
     component: () => import('@/views/lowcodeEdit.vue'),
     meta: {
@@ -67,7 +67,7 @@ router.beforeEach((to, from, next) => {
   // 校验编辑页 ID 参数
   if (to.meta.requiresId && !to.params.id) {
     // 无 ID 时重定向到首页
-    next({ name: 'lowcode-designer-home' })
+    next({ name: 'lowcode_designer-home' })
     return
   }
 

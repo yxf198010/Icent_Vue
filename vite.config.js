@@ -10,7 +10,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src')
     }
   },
-  // 基础路径配置（空字符串表示根路径，适配 /lowcode-designer 路由）
+  // 基础路径配置（空字符串表示根路径，适配 /lowcode_designer 路由）
   base: '',
   server: {
     // 允许通过 127.0.0.1 访问

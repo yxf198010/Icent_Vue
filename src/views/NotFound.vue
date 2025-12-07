@@ -14,7 +14,7 @@ import { CircleClose } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const goHome = () => {
-  router.push({ name: 'lowcode-designer-home' })
+  router.push({ name: 'lowcode_designer-home' })
 }
 </script>
 
