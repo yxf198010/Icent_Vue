@@ -680,7 +680,7 @@ defineExpose({
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /* 全局CSS变量 */
 :root {
   --primary-color: #409EFF;
@@ -846,12 +846,12 @@ defineExpose({
   color: #ffffff !important;
 }
 
-/* 导出按钮样式 - 关键修改：移除hover背景色修改，统一使用通用效果 */
+/* 导出按钮样式 - 关键修复：确保语法正确，大括号匹配 */
 :deep(.export-btn.el-button--default) {
   background-color: var(--export-color) !important;
   border-color: var(--export-color) !important;
   color: #ffffff !important;
-  
+
   .el-icon,
   svg {
     color: #ffffff !important;
@@ -861,10 +861,10 @@ defineExpose({
 }
 
 :deep(.export-btn.el-button--default:hover) {
-  /* 移除背景色和边框色修改，使用通用的brightness滤镜 */
   color: #ffffff !important;
   box-shadow: var(--export-hover-shadow) !important;
-  
+  filter: brightness(0.95); /* 统一使用通用滤镜效果 */
+
   .el-icon,
   svg {
     color: #ffffff !important;
@@ -876,6 +876,8 @@ defineExpose({
 :deep(.export-btn.el-button--default:active) {
   background-color: #1ea8a5 !important;
   border-color: #1ea8a5 !important;
+  transform: scale(0.98);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* 主体布局 */

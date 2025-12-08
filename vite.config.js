@@ -129,7 +129,7 @@ export default defineConfig(({ mode }) => {
       devSourcemap: isDevelopment,
       preprocessorOptions: {
         scss: {
-          additionalData: '@import "@/styles/variables.scss";'
+
         }
       },
       postcss: {
