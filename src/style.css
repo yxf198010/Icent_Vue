@@ -1,99 +1,238 @@
 /* 全局样式重置与基础配置 */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* 适配工业低代码平台主色调 */
+  --primary-color: #1989fa;
+  --secondary-color: #f5f7fa;
+  --text-color: #213547;
+  --text-light-color: #666;
+  --border-color: #e5e6eb;
+  --bg-color: #ffffff;
+  --card-bg-color: #ffffff;
+  --shadow-color: rgba(0, 0, 0, 0.05);
+
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
   color-scheme: light dark;
-  color: #213547;
-  background-color: #ffffff;
+  color: var(--text-color);
+  background-color: var(--bg-color);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* 基础元素重置 */
+/* 基础元素重置（增强版） */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  /* 禁止文本选中（设计器操作区优化） */
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* 修复 Django 模板 body 样式继承问题 */
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden; /* 低代码设计器全屏布局，禁用滚动 */
+  background-color: var(--secondary-color); /* 适配 Django 模板的背景色 */
 }
 
 body {
-  margin: 0;
   min-width: 320px;
   min-height: 100vh;
   overflow-x: hidden; /* 兜底隐藏横向滚动条 */
 }
 
-/* 应用容器样式（全屏布局） */
+/* 应用容器样式（适配 Django 模板 #app 容器，全屏布局） */
 #app {
   width: 100%;
   height: 100vh;
   margin: 0;
   padding: 0;
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-/* 链接样式 */
+/* 链接样式（适配平台主色调） */
 a {
   font-weight: 500;
-  color: #1989fa;
+  color: var(--primary-color);
   text-decoration: inherit;
-  transition: color 0.2s;
+  transition: color 0.2s ease;
 }
 
 a:hover {
   color: #0f6ecd;
 }
 
-/* 按钮基础样式（兼容 Element Plus） */
+a:active {
+  color: #0a58a7;
+}
+
+/* 按钮基础样式（兼容 Element Plus，统一视觉） */
 button {
-  border-radius: 8px;
+  border-radius: 6px; /* 适配 Element Plus 圆角风格 */
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
+  padding: 0.5em 1em;
+  font-size: 14px; /* 适配平台字体大小 */
   font-weight: 500;
   font-family: inherit;
   background-color: #f9f9f9;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: all 0.2s ease;
 }
 
 button:hover {
-  border-color: #1989fa;
+  border-color: var(--primary-color);
+  background-color: #f0f7ff;
 }
 
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 2px solid rgba(25, 137, 250, 0.3);
+  outline-offset: 2px;
 }
 
-/* 深色模式适配 */
-@media (prefers-color-scheme: dark) {
-  :root {
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #242424;
-  }
-  a:hover {
-    color: #64b5f6;
-  }
-  button {
-    background-color: #1a1a1a;
-  }
+/* 表单元素样式重置（适配设计器表单组件） */
+input, select, textarea {
+  font-family: inherit;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  padding: 8px 12px;
+  transition: border-color 0.2s ease;
+  /* 允许文本选中 */
+  -webkit-user-select: text;
+  user-select: text;
 }
 
-/* 滚动条美化（全局） */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(25, 137, 250, 0.1);
+}
+
+/* 滚动条美化（全局，适配平台风格） */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: #dcdfe6;
-  border-radius: 3px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #c0c4cc;
 }
 
 ::-webkit-scrollbar-track {
-  background-color: #f5f7fa;
+  background-color: var(--secondary-color);
+  border-radius: 4px;
+}
+
+/* 自定义滚动条适配 Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #dcdfe6 var(--secondary-color);
+}
+
+/* 深色模式适配（工业平台风格） */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-color: #3399ff;
+    --secondary-color: #1e1e20;
+    --text-color: rgba(255, 255, 255, 0.87);
+    --text-light-color: #a0a6b3;
+    --border-color: #303036;
+    --bg-color: #141414;
+    --card-bg-color: #1e1e20;
+    --shadow-color: rgba(0, 0, 0, 0.2);
+  }
+
+  a:hover {
+    color: #64b5f6;
+  }
+
+  button {
+    background-color: #2a2a2e;
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  button:hover {
+    background-color: #333338;
+    border-color: var(--primary-color);
+  }
+
+  input, select, textarea {
+    background-color: #2a2a2e;
+    color: rgba(255, 255, 255, 0.87);
+    border-color: var(--border-color);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #44444a;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #55555c;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: var(--secondary-color);
+  }
+}
+
+/* 适配 Element Plus 组件的全局样式修正 */
+:root {
+  /* 覆盖 Element Plus 变量，统一风格 */
+  --el-color-primary: var(--primary-color);
+  --el-color-primary-light-3: #4da3ff;
+  --el-color-primary-light-5: #73b6ff;
+  --el-color-primary-light-7: #99c9ff;
+  --el-color-primary-light-8: #accfff;
+  --el-color-primary-light-9: #cce2ff;
+  --el-color-primary-dark-2: #0f6ecd;
+  --el-font-size-base: 14px;
+  --el-border-radius-base: 6px;
+  --el-border-radius-small: 4px;
+  --el-border-radius-large: 8px;
+}
+
+/* 设计器专属全局样式 */
+.designer-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-light-color);
+  padding: 40px 20px;
+}
+
+.designer-empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  color: #c0c4cc;
+}
+
+.designer-empty-text {
+  font-size: 14px;
+}
+
+/* 响应式基础适配 */
+@media (max-width: 768px) {
+  :root {
+    font-size: 14px;
+  }
+
+  #app {
+    overflow-y: auto;
+  }
 }
