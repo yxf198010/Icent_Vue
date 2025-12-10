@@ -1,3 +1,4 @@
+/* style.css */
 /* 全局样式重置与基础配置 */
 :root {
   /* 适配工业低代码平台主色调 */
@@ -33,29 +34,34 @@
 }
 
 /* 修复 Django 模板 body 样式继承问题 */
-html, body {
-  height: 100%;
-  width: 100%;
-  overflow: hidden; /* 低代码设计器全屏布局，禁用滚动 */
-  background-color: var(--secondary-color); /* 适配 Django 模板的背景色 */
+html {
+  /* html 不设高度限制，让 body 自然撑开 */
 }
 
 body {
   min-width: 320px;
-  min-height: 100vh;
-  overflow-x: hidden; /* 兜底隐藏横向滚动条 */
+  min-height: 100vh; /* 至少一屏高 */
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  /* ✅ 允许垂直滚动（关键修改） */
+  overflow-x: hidden; /* 防止横向滚动 */
+  overflow-y: auto;   /* 内容超出时显示垂直滚动条 */
+  background-color: var(--secondary-color); /* 适配 Django 模板的背景色 */
+  font-family: inherit;
+  color: var(--text-color);
 }
 
 /* 应用容器样式（适配 Django 模板 #app 容器，全屏布局） */
 #app {
   width: 100%;
-  height: 100vh;
+  height: 100vh;        /* 固定视口高度 */
   margin: 0;
   padding: 0;
   text-align: left;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: hidden;     /* 设计器内部不滚动，由内部组件管理 */
 }
 
 /* 链接样式（适配平台主色调） */
@@ -233,6 +239,8 @@ input:focus, select:focus, textarea:focus {
   }
 
   #app {
+    height: auto;
+    min-height: 100vh;
     overflow-y: auto;
   }
 }

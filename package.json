@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "node --max-old-space-size=8192 ./node_modules/vite/bin/vite.js build",
+    "postbuild": "node scripts/fix-manifest.js",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.1",
+    "rimraf": "^6.1.2",
     "sass-embedded": "^1.93.3",
     "terser": "^5.44.1",
     "vite": "^7.2.4"

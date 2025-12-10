@@ -1,7 +1,14 @@
+//vite.config.js
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
 import fs from 'fs'
+
+// 动态加载 Monaco（仅示例，实际使用请在组件中调用）
+const initMonaco = async () => {
+  const monaco = await import('monaco-editor')
+  // ...
+}
 
 const ensureDirExists = (dirPath) => {
   if (!fs.existsSync(dirPath)) {
@@ -11,18 +18,15 @@ const ensureDirExists = (dirPath) => {
 }
 
 export default defineConfig(({ mode }) => {
-  // 正确加载对应环境的环境变量
   const env = loadEnv(mode, process.cwd())
   const isDevelopment = mode === 'development'
   const isProduction = mode === 'production'
 
-  const outputDir = path.resolve(__dirname, '../../Icent_LowCode/lowcode/static/lowcode_designer/assets')
+  const outputDir = path.resolve(__dirname, '../../Icent_LowCode/lowcode/static/lowcode_designer')
   ensureDirExists(outputDir)
 
   return {
-    plugins: [
-      vue() // 移除错误的 isCustomElement 配置
-    ],
+    plugins: [vue()],
 
     resolve: {
       alias: {
@@ -33,10 +37,9 @@ export default defineConfig(({ mode }) => {
       extensions: ['.vue', '.js', '.jsx', '.json']
     },
 
-    // 开发环境使用相对根路径，避免资源路径异常
     base: isDevelopment 
       ? '/'  
-      : '/static/lowcode_designer/assets/',
+      : '/static/lowcode_designer/',
 
     server: {
       host: '0.0.0.0',
@@ -44,7 +47,6 @@ export default defineConfig(({ mode }) => {
       open: false,
       cors: true,
       watch: {
-        // 可选：通过环境变量控制轮询，默认关闭
         usePolling: env.VITE_WATCH_POLLING === 'true',
         interval: 100,
         ignored: ['**/node_modules/**', '**/dist/**']
@@ -66,60 +68,33 @@ export default defineConfig(({ mode }) => {
     },
 
     build: {
-      lib: isProduction ? {
-        entry: path.resolve(__dirname, 'src/main.js'),
-        name: 'LowcodeDesigner',
-        fileName: (format) => `lowcode-designer.${format}.js`,
-        formats: ['es', 'umd']
-      } : undefined,
-
       outDir: outputDir,
-      emptyOutDir: isProduction,
-      assetsDir: '',
+      emptyOutDir: isProduction, // 仅生产清空
+      assetsDir: 'assets',
       chunkSizeWarningLimit: 1500,
       manifest: true,
-      minify: isProduction ? 'terser' : false,
-      terserOptions: isProduction ? {
-        compress: {
-          drop_console: true,
-          drop_debugger: true,
-          pure_funcs: ['console.log', 'console.warn']
-        },
-        format: {
-          comments: false
-        }
-      } : {},
-      sourcemap: isDevelopment,
+      ssr: false, // 👈 显式关闭
+      sourcemap: false,
+      minify: 'esbuild',
       target: 'es2020',
+
       rollupOptions: {
-        // 生产环境外部化核心依赖，开发环境不外部化
-        external: isProduction ? ['vue', 'element-plus', '@element-plus/icons-vue'] : [],
+        // 👇 关键：显式指定入口，确保 manifest 正确生成
+        input: path.resolve(__dirname, 'src/main.js'), // 改为字符串,
+
         output: {
-          globals: isProduction ? {
-            vue: 'Vue',
-            'element-plus': 'ElementPlus',
-            '@element-plus/icons-vue': 'ElementPlusIconsVue'
-          } : {},
-          // 核心修改：仅开发环境启用 manualChunks，生产环境（lib模式）移除
+          // 开发环境可启用 manualChunks（当前禁用以简化）
           ...(isDevelopment ? {
-            manualChunks: (id) => {
-              if (id.includes('node_modules')) {
-                const packageName = id.toString().split('node_modules/')[1].split('/')[0]
-                if (packageName.includes('element-plus')) {
-                  return 'element-plus-vendor'
-                }
-                return 'vendor'
-              }
-            }
+            manualChunks: undefined
           } : {}),
-          assetFileNames: '[name].[hash].[ext]',
-          chunkFileNames: '[name].[hash].js',
-          entryFileNames: '[name].[hash].js'
+
+          entryFileNames: `assets/[name].[hash].js`,
+          chunkFileNames: `assets/[name].[hash].js`,
+          assetFileNames: `assets/[name].[hash].[ext]`
         },
+
         onwarn: (warning, warn) => {
-          if (warning.code === 'CIRCULAR_DEPENDENCY') {
-            return
-          }
+          if (warning.code === 'CIRCULAR_DEPENDENCY') return
           warn(warning)
         }
       }
@@ -128,19 +103,16 @@ export default defineConfig(({ mode }) => {
     css: {
       devSourcemap: isDevelopment,
       preprocessorOptions: {
-        scss: {
-
-        }
+        scss: {}
       },
       postcss: {
         plugins: []
       }
     },
 
-    // 预构建核心依赖，移除强制预构建
     optimizeDeps: {
       include: ['vue', 'element-plus', '@element-plus/icons-vue'],
-      exclude: []
+      exclude: ['monaco-editor'] // 防止预构建导致 OOM
     },
 
     logLevel: isDevelopment ? 'info' : 'warn',
