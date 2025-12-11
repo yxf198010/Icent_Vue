@@ -33,11 +33,6 @@
   user-select: none;
 }
 
-/* 修复 Django 模板 body 样式继承问题 */
-html {
-  /* html 不设高度限制，让 body 自然撑开 */
-}
-
 body {
   min-width: 320px;
   min-height: 100vh; /* 至少一屏高 */
