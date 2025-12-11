@@ -47,6 +47,20 @@ body {
   color: var(--text-color);
 }
 
+.lowcode-designer-container {
+    width: 100%;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.loading-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: #666;
+}
+
 /* 应用容器样式（适配 Django 模板 #app 容器，全屏布局） */
 #app {
   width: 100%;
