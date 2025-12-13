@@ -1,6 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 // 导入表单设计器首页组件
-import FormDesignerHome from '@/views/FormDesignerHome.vue'
+import FormDesignerHome from '@/views/lowcodeDesignerHome.vue'
+
+import ModelList from '@/views/lowcode/model-list.vue'
+import ModelCreate from '@/views/lowcode/model-create.vue'
+import ModelEdit from '@/views/lowcode/model-edit.vue'
+import ModelUpgrade from '@/views/lowcode/model-upgrade.vue'
+
 
 // 定义路由规则（移除 TypeScript 类型提示）
 const routes = [
@@ -43,6 +49,27 @@ const routes = [
     meta: {
       title: '页面未找到'
     }
+  },
+
+  {
+    path: '/lowcode/model-list',
+    name: 'ModelList',
+    component: ModelList
+  },
+  {
+    path: '/lowcode/model-create',
+    name: 'ModelCreate',
+    component: ModelCreate
+  },
+  {
+    path: '/lowcode/model-edit/:id',
+    name: 'ModelEdit',
+    component: ModelEdit
+  },
+  {
+    path: '/lowcode/model-upgrade/:id',
+    name: 'ModelUpgrade',
+    component: ModelUpgrade
   }
 ]
 
